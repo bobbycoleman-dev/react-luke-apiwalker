@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../components/Button";
 
 const Form = (props) => {
 	const searchParams = ["People", "Planets", "Species"];
@@ -40,9 +41,12 @@ const Form = (props) => {
 						onChange={(e) => setSearchID(e.target.value)}
 					/>
 				</div>
-				<div className="align-self-end text-center">
+
+				<Button buttonText={"Find"} />
+
+				{/* <div className="align-self-end text-center">
 					<button className="btn btn-warning">Search</button>
-				</div>
+				</div> */}
 			</form>
 		</div>
 	);

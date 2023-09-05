@@ -1,10 +1,11 @@
-import Card from "./components/Card";
+import Card from "./views/Card";
 import Form from "./views/Form";
 import Error from "./views/Error";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Welcome from "./views/Welcome";
+import Button from "./components/Button";
 
 function App() {
 	const [currentData, setCurrentData] = useState([]);

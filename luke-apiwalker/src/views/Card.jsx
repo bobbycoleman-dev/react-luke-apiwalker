@@ -1,6 +1,6 @@
-import PeopleCardBody from "./PeopleCardBody";
-import PlanetCardBody from "./PlanetCardBody";
-import SpeciesCardBody from "./SpeciesCardBody";
+import PeopleCardBody from "../components/PeopleCardBody";
+import PlanetCardBody from "../components/PlanetCardBody";
+import SpeciesCardBody from "../components/SpeciesCardBody";
 
 const Card = (props) => {
 	const { currentData, currentGroup, currentHomeworld } = props;
