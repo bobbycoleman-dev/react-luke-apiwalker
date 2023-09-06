@@ -1,20 +1,55 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import Button from "../components/Button";
+import axios from "axios";
 
 const Form = (props) => {
 	const searchParams = ["People", "Planets", "Species"];
 	const [searchGroup, setSearchGroup] = useState("people");
 	const [searchID, setSearchID] = useState(1);
+	const navigate = useNavigate();
+	const { setCurrentGroup, setCurrentData, setCurrenHomeworld } = props;
+
+	const fetchData = (group, id) => {
+		setCurrentGroup(group);
+		const base = "https://swapi.dev/api/";
+
+		fetch(`${base}${group}/${id}`)
+			.then((response) => {
+				return response.json();
+			})
+			.then((response) => {
+				setCurrentData(response);
+
+				if (!response.detail) {
+					if (group == "people") {
+						axios
+							.get(`${response.homeworld}`)
+							.then((response) => {
+								setCurrenHomeworld(response.data.name);
+							})
+							.catch((err) => console.log(err));
+					}
+					navigate(`${group}/${id}`);
+				} else {
+					navigate("/error");
+				}
+			})
+			.catch((err) => {
+				navigate("/error");
+			});
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		props.fetchData(searchGroup, searchID);
+		fetchData(searchGroup, searchID);
 	};
 
 	return (
 		<div className="d-flex justify-content-center align-items-center">
 			<form onSubmit={handleSubmit} className="d-flex gap-3 w-50 justify-content-between align-items-center">
+				{/* SELECT FIELD */}
 				<div className="d-flex align-items-center gap-3">
 					<label className="form-label text-end m-0" style={{ width: 200 }}>
 						Search For:
@@ -32,6 +67,8 @@ const Form = (props) => {
 						})}
 					</select>
 				</div>
+
+				{/* ID INPUT FIELD */}
 				<div className="d-flex align-items-center flex-1 gap-3">
 					<label className="form-label text-end m-0">ID:</label>
 					<input
@@ -42,11 +79,8 @@ const Form = (props) => {
 					/>
 				</div>
 
+				{/* SUBMIT BUTTON */}
 				<Button buttonText={"Find"} />
-
-				{/* <div className="align-self-end text-center">
-					<button className="btn btn-warning">Search</button>
-				</div> */}
 			</form>
 		</div>
 	);

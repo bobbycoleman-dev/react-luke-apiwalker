@@ -2,48 +2,15 @@ import Card from "./views/Card";
 import Form from "./views/Form";
 import Error from "./views/Error";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Welcome from "./views/Welcome";
-import Button from "./components/Button";
 
 function App() {
 	const [currentData, setCurrentData] = useState([]);
 	const [currentGroup, setCurrentGroup] = useState("");
 	const [currentHomeworld, setCurrenHomeworld] = useState("");
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		navigate("/");
-	}, []);
-
-	const fetchData = (group, id) => {
-		setCurrentGroup(group);
-		const base = "https://swapi.dev/api/";
-
-		fetch(`${base}${group}/${id}`)
-			.then((response) => {
-				return response.json();
-			})
-			.then((response) => {
-				setCurrentData(response);
-
-				if (!response.detail) {
-					if (group == "people") {
-						axios.get(`${response.homeworld}`).then((response) => {
-							setCurrenHomeworld(response.data.name);
-						});
-					}
-					console.log(currentHomeworld);
-					navigate(`${group}/${id}`);
-				} else {
-					navigate("/error");
-				}
-			})
-			.catch((err) => {
-				navigate("/error");
-			});
-	};
 
 	const fetchPlanet = (url) => {
 		setCurrentGroup("planets");
@@ -55,7 +22,11 @@ function App() {
 
 	return (
 		<div className="container mt-5 d-flex flex-column">
-			<Form fetchData={fetchData} />
+			<Form
+				setCurrentGroup={setCurrentGroup}
+				setCurrentData={setCurrentData}
+				setCurrenHomeworld={setCurrenHomeworld}
+			/>
 			<Routes>
 				<Route path="/" element={<Welcome />} />
 				<Route
